@@ -1,12 +1,14 @@
 package edu.uoc.ia;
 
+import java.lang.reflect.Array;
+
 public class MatricesUtils {
 
 	private MatricesUtils() {
 
 	}
 
-	public static boolean contieneAlgunNulo(Boolean[][] matriz) {
+	public static boolean contieneAlgunNulo(Object[][] matriz) {
 
 		for (int i = 0; i < matriz.length; i++) {
 
@@ -22,14 +24,14 @@ public class MatricesUtils {
 		return true;
 	}
 
-	public static Boolean[] extraerDiagonal(Boolean[][] matriz) {
+	public static Object[] extraerDiagonal(Object[][] matriz) {
 
 		if (matriz.length != matriz[0].length) {
 
 			throw new IllegalArgumentException("La matriz no es cuadrada");
 		}
 
-		Boolean[] diagonal = new Boolean[matriz.length];
+		Object[] diagonal = new Object[matriz.length];
 
 		for (int i = 0; i < diagonal.length; i++) {
 
@@ -39,7 +41,7 @@ public class MatricesUtils {
 		return diagonal;
 	}
 
-	public static boolean tieneMismoValor(Boolean valor, Boolean[] array) {
+	public static boolean tieneMismoValor(Object valor, Object[] array) {
 
 		for (int i = 0; i < array.length; i++) {
 
@@ -51,10 +53,10 @@ public class MatricesUtils {
 		return true;
 	}
 
-	public static Boolean[][] girarMatriz(Boolean[][] matriz) {
+	public static <E> E[][] girarMatriz(E[][] matriz) {
 
-		Boolean[][] nuevaMatriz = new Boolean[matriz.length][matriz[0].length];
-
+		E[][] nuevaMatriz = (E[][]) Array.newInstance(matriz.getClass().getComponentType().getComponentType(), matriz.length, matriz[0].length);
+		
 		for (int i = 0; i < matriz.length; i++) {
 
 			for (int j = 0; j < matriz[0].length; j++) {

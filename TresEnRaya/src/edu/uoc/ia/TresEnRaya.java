@@ -8,13 +8,13 @@ import java.util.Scanner;
 
 public class TresEnRaya {
 
-	public static Boolean jugadorX_Max = false;
-	public static Boolean jugadorO_Min = true;
+	public static Turno jugadorX_Max = Turno.X;
+	public static Turno jugadorO_Min = Turno.O;
 
 	private Estado estadoActual = null;
-	private Boolean turno = null;
+	private Turno turno = null;
 
-	private Integer valorMinimax(boolean turno, Estado estado) {
+	private Integer valorMinimax(Turno turno, Estado estado) {
 
 		Integer valorFuncionUtilidad = funcionUtilidad(estado);
 
@@ -27,7 +27,7 @@ public class TresEnRaya {
 			while (itPosiblesJugadas.hasNext()) {
 
 				Estado jugada = itPosiblesJugadas.next();
-				jugada.valor = valorMinimax(!turno, jugada);
+				jugada.valor = valorMinimax(turno.contrario(), jugada);
 			}
 
 			Estado mejorEstado = seleccionaMinOMax(turno, posiblesJugadas);
@@ -45,7 +45,7 @@ public class TresEnRaya {
 		return valorFuncionUtilidad;
 	}
 
-	private Estado seleccionaMinOMax(boolean turno, LinkedList<Estado> estados) {
+	private Estado seleccionaMinOMax(Turno turno, LinkedList<Estado> estados) {
 
 		Collections.shuffle(estados);
 
@@ -61,7 +61,7 @@ public class TresEnRaya {
 		return turno == jugadorO_Min ? estados.getFirst() : estados.getLast();
 	}
 
-	private LinkedList<Estado> generaPosiblesJugadas(boolean turno,
+	private LinkedList<Estado> generaPosiblesJugadas(Turno turno,
 			Estado estado) {
 
 		LinkedList<Estado> jugadas = new LinkedList<Estado>();
@@ -109,9 +109,9 @@ public class TresEnRaya {
 		return null;
 	}
 
-	private boolean haGanado(Boolean jugador, Boolean[][] tablero) {
+	private boolean haGanado(Turno jugador, Turno[][] tablero) {
 
-		Boolean[][] tableroGirado = MatricesUtils.girarMatriz(tablero);
+		Turno[][] tableroGirado = (Turno[][])MatricesUtils.girarMatriz(tablero);
 
 		return MatricesUtils.tieneMismoValor(jugador, tablero[0])
 				|| MatricesUtils.tieneMismoValor(jugador, tablero[1])
@@ -125,7 +125,7 @@ public class TresEnRaya {
 						MatricesUtils.extraerDiagonal(tableroGirado));
 	}
 
-	private boolean tableroLleno(Boolean[][] tablero) {
+	private boolean tableroLleno(Turno[][] tablero) {
 
 		return MatricesUtils.contieneAlgunNulo(tablero);
 	}
@@ -165,7 +165,7 @@ public class TresEnRaya {
 		System.out.println("¿Quiere colocar la pieza central? S/N");
 		Scanner in = new Scanner(System.in);
 
-		turno = in.next().matches("[Ss]");
+		turno = in.next().matches("[Ss]") ? Turno.O : Turno.X;
 
 		Estado estado = new Estado();
 		estado.tablero[1][1] = turno;
@@ -177,11 +177,11 @@ public class TresEnRaya {
 
 		while ((valorFuncionUtilidad = funcionUtilidad(estadoActual)) == null) {
 
-			turno = !turno;
+			turno = turno.contrario();
 
 			if (turno == jugadorX_Max) {
 
-				valorMinimax(false, estadoActual);
+				valorMinimax(turno, estadoActual);
 
 			} else {
 

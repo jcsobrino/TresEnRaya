@@ -3,7 +3,7 @@ package edu.uoc.ia;
 public class Estado {
 
 	public Integer valor = null;
-	public Boolean[][] tablero = new Boolean[3][3];
+	public Turno[][] tablero = new Turno[3][3];
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
@@ -46,11 +46,11 @@ public class Estado {
 
 			for (int j = 0; j < tablero[0].length; j++) {
 
-				if (tablero[i][j] == TresEnRaya.jugadorO_Min) {
+				if (tablero[i][j] == Turno.O) {
 
 					print.append("| O ");
 
-				} else if (tablero[i][j] == TresEnRaya.jugadorX_Max) {
+				} else if (tablero[i][j] == Turno.X) {
 
 					print.append("| X ");
 
